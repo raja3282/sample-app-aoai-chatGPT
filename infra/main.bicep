@@ -31,8 +31,8 @@ param openAiResourceName string = ''
 param openAiResourceGroupName string = ''
 param openAiResourceGroupLocation string = location
 param openAiSkuName string = ''
-param openAIModel string = 'turbo16k'
-param openAIModelName string = 'gpt-35-turbo-16k'
+param openAIModel string = 'gpt-35-turbo'
+param openAIModelName string = 'gpt-35-turbo'
 param openAITemperature int = 0
 param openAITopP int = 1
 param openAIMaxTokens int = 1000
@@ -158,9 +158,9 @@ module openAi 'core/ai/cognitiveservices.bicep' = {
         model: {
           format: 'OpenAI'
           name: openAIModelName
-          version: '0613'
+          version: '0125'
         }
-        capacity: 30
+        capacity: 70
       }
       {
         name: embeddingDeploymentName
@@ -169,7 +169,7 @@ module openAi 'core/ai/cognitiveservices.bicep' = {
           name: embeddingModelName
           version: '2'
         }
-        capacity: 30
+        capacity: 120
       }
     ]
   }
@@ -195,16 +195,16 @@ module searchService 'core/search/search-services.bicep' = {
 }
 
 // The application database
-module cosmos 'db.bicep' = {
-  name: 'cosmos'
-  scope: resourceGroup
-  params: {
-    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-    location: resourceGroup.location
-    tags: tags
-    principalIds: [principalId, backend.outputs.identityPrincipalId]
-  }
-}
+// module cosmos 'db.bicep' = {
+//   name: 'cosmos'
+//   scope: resourceGroup
+//   params: {
+//     accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+//     location: resourceGroup.location
+//     tags: tags
+//     principalIds: [principalId, backend.outputs.identityPrincipalId]
+//   }
+// }
 
 
 // USER ROLES
@@ -327,8 +327,8 @@ output AZURE_FORMRECOGNIZER_RESOURCE_GROUP string = docPrepResources.outputs.AZU
 output AZURE_FORMRECOGNIZER_SKU_NAME string = docPrepResources.outputs.AZURE_FORMRECOGNIZER_SKU_NAME
 
 // cosmos
-output AZURE_COSMOSDB_ACCOUNT string = cosmos.outputs.accountName
-output AZURE_COSMOSDB_DATABASE string = cosmos.outputs.databaseName
-output AZURE_COSMOSDB_CONVERSATIONS_CONTAINER string = cosmos.outputs.containerName
+// output AZURE_COSMOSDB_ACCOUNT string = cosmos.outputs.accountName
+// output AZURE_COSMOSDB_DATABASE string = cosmos.outputs.databaseName
+// output AZURE_COSMOSDB_CONVERSATIONS_CONTAINER string = cosmos.outputs.containerName
 
 output AUTH_ISSUER_URI string = authIssuerUri
